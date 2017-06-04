@@ -22,8 +22,9 @@ namespace The100AutoMod
         private static readonly String THE100_AFTER_LOGIN_URL = "https://www.the100.io/users/264831/dashboard";
         private static readonly String THE100_CHAT_URL = "https://www.the100.io/groups/268/chatroom";
 
+        private ChromiumWebBrowser uiBrowser;
+
         private The100AutoModBoundObject _bound;
-        private ChromiumWebBrowser _browser;
         private bool _loginAttempted;
 
         public The100AutoModForm()
@@ -37,11 +38,12 @@ namespace The100AutoMod
 
             _loginAttempted = false;
 
+            this.Resize += The100AutoModForm_Resize;
             this.ResizeEnd += The100AutoModForm_ResizeEnd;
             this.FormClosing += The100AutoModForm_FormClosing;
 
-            _toggleDevToolsMenuItem.Click += ToggleDevToolsMenuItem_Click;
-            _exitMenuItem.Click += ExitMenuItem_Click;
+            uiToggleDevToolsMenuItem.Click += UiToggleDevToolsMenuItem_Click;
+            uiExitMenuItem.Click += UiExitMenuItem_Click;
         }
 
         private void InitializeBound()
@@ -61,48 +63,25 @@ namespace The100AutoMod
             };
             LOG.DebugInject( "InitializeChromium - Chromium: {chromium}, CEF: {cef}, CefSharp: {cefsharp}, Environment: {environment}", initInfo );
 
-            _browser = new ChromiumWebBrowser( THE100_LOGIN_URL );
-            this.Controls.Add( _browser );
-            _browser.Dock = DockStyle.Fill;
-            _browser.BringToFront();
+            uiBrowser = new ChromiumWebBrowser( THE100_LOGIN_URL );
+            uiSplitLayout.Panel1.Controls.Add( uiBrowser );
+            uiBrowser.Dock = DockStyle.Fill;
+            uiBrowser.BringToFront();
 
-            _browser.IsBrowserInitializedChanged += Browser_IsBrowserInitializedChanged;
-            _browser.FrameLoadEnd += Browser_FrameLoadEnd;
+            uiBrowser.IsBrowserInitializedChanged += UiBrowser_IsBrowserInitializedChanged;
+            uiBrowser.FrameLoadEnd += UiBrowser_FrameLoadEnd;
             
-            _browser.RegisterAsyncJsObject( "The100AutoMod", _bound );
+            uiBrowser.RegisterAsyncJsObject( "The100AutoMod", _bound );
         }
 
         private void InitializeNotifyIcon()
         {
-            _notifyIcon.Icon = this.Icon;
+            uiNotifyIcon.Icon = this.Icon;
 
-            _notifyIcon.DoubleClick += NotifyIcon_DoubleClick;
+            uiNotifyIcon.DoubleClick += UiNotifyIcon_DoubleClick;
 
-            _openNotifyIconMenuItem.Click += OpenNotifyIconMenuItem_Click;
-            _exitNotifyIconMenuItem.Click += ExitNotifyIconMenuItem_Click;
-        }
-
-        private void NotifyIcon_DoubleClick( object sender, EventArgs e )
-        {
-            LOG.Debug( "NotifyIcon - Double Click" );
-
-            this.Show();
-            _notifyIcon.Visible = false;
-        }
-
-        private void OpenNotifyIconMenuItem_Click( object sender, EventArgs e )
-        {
-            LOG.Debug( "NotifyIcon - Open" );
-
-            this.Show();
-            _notifyIcon.Visible = false;
-        }
-
-        private void ExitNotifyIconMenuItem_Click( object sender, EventArgs e )
-        {
-            LOG.Debug( "NotifyIcon - Exit" );
-
-            Application.Exit();
+            uiOpenNotifyIconMenuItem.Click += UiOpenNotifyIconMenuItem_Click;
+            uiExitNotifyIconMenuItem.Click += UiExitNotifyIconMenuItem_Click;
         }
 
         private void InitializeFromSettings()
@@ -121,6 +100,36 @@ namespace The100AutoMod
             if( Settings.Default.The100AutoModFormMaximized )
             {
                 this.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        private void UiNotifyIcon_DoubleClick( object sender, EventArgs e )
+        {
+            LOG.Debug( "NotifyIcon - Double Click" );
+
+            this.ShowMe();
+        }
+
+        private void UiOpenNotifyIconMenuItem_Click( object sender, EventArgs e )
+        {
+            LOG.Debug( "NotifyIcon - Open" );
+
+            this.ShowMe();
+        }
+
+        private void UiExitNotifyIconMenuItem_Click( object sender, EventArgs e )
+        {
+            LOG.Debug( "NotifyIcon - Exit" );
+
+            this.Close();
+        }
+
+        private void The100AutoModForm_Resize( object sender, EventArgs e )
+        {
+            if( this.WindowState == FormWindowState.Minimized )
+            {
+                this.Hide();
+                uiNotifyIcon.Visible = true;
             }
         }
 
@@ -152,45 +161,37 @@ namespace The100AutoMod
         {
             LOG.DebugInject( "FormClosing - Reason: {CloseReason}", e );
 
-            if( e.CloseReason == CloseReason.UserClosing )
-            {
-                LOG.Debug( "FormClosing - Cancelling Close" );
-
-                e.Cancel = true;
-                this.Hide();
-                _notifyIcon.Visible = true;
-                return;
-            }
-
-            _browser.Dispose();
+            uiBrowser.Dispose();
         }
 
-        private void ToggleDevToolsMenuItem_Click( object sender, EventArgs e )
+        private void UiToggleDevToolsMenuItem_Click( object sender, EventArgs e )
         {
-            if( _browser.IsBrowserInitialized )
+            if( uiBrowser.IsBrowserInitialized )
             {
-                _browser.ShowDevTools();
+                uiBrowser.ShowDevTools();
             }
         }
 
-        private void ExitMenuItem_Click( object sender, EventArgs e )
+        private void UiExitMenuItem_Click( object sender, EventArgs e )
         {
-            Application.Exit();
+            this.Close();
         }
 
         private void Bound_NewMessageReceived( object sender, MessageReceivedEventArgs e )
         {
             LOG.DebugInject( "NewMessageReceived - {Message}", e );
+
+            this.UiBeginInvoke( (Action<Message>)AppendMessage, e.Message );
         }
 
-        private void Browser_IsBrowserInitializedChanged( object sender, IsBrowserInitializedChangedEventArgs e )
+        private void UiBrowser_IsBrowserInitializedChanged( object sender, IsBrowserInitializedChangedEventArgs e )
         {
             LOG.DebugInject( "Browser_IsBrowserInitializedChanged - IsInitialized: {IsBrowserInitialized}", e );
 
-            _toggleDevToolsMenuItem.Enabled = e.IsBrowserInitialized;
+            uiToggleDevToolsMenuItem.Enabled = e.IsBrowserInitialized;
         }
 
-        private void Browser_FrameLoadEnd( object sender, FrameLoadEndEventArgs e )
+        private void UiBrowser_FrameLoadEnd( object sender, FrameLoadEndEventArgs e )
         {
             LOG.DebugInject( "Browser_FrameLoadEnd - URL: {Url} - Status Code: {HttpStatusCode}", e );
 
@@ -213,14 +214,25 @@ namespace The100AutoMod
             {
                 LOG.Debug( "Browser_FrameLoadEnd - After Login" );
 
-                _browser.Load( THE100_CHAT_URL );
+                uiBrowser.Load( THE100_CHAT_URL );
             }
             else if( e.Url == THE100_CHAT_URL )
             {
                 LOG.Debug( "Browser_FrameLoaded - Chat" );
 
-                _browser.ExecuteScriptAsync( Resources.CreateChatListenerScript );
+                uiBrowser.ExecuteScriptAsync( Resources.CreateChatListenerScript );
             }
+        }
+
+        private void ShowMe()
+        {
+            this.Show();
+            if( this.WindowState == FormWindowState.Minimized )
+            {
+                this.WindowState = FormWindowState.Normal;
+            }
+            this.BringToFront();
+            uiNotifyIcon.Visible = false;
         }
 
         private void SendLogin()
@@ -230,11 +242,12 @@ namespace The100AutoMod
                 username = Settings.Default.The100Username,
                 password = Settings.Default.The100Password
             };
-            _browser.ExecuteScriptAsync( Resources.LoginScript.Inject( auth ) );
+            uiBrowser.ExecuteScriptAsync( Resources.LoginScript.Inject( auth ) );
         }
 
         private void PromptLogin()
         {
+            ShowMe();
             LoginDialog login = new LoginDialog( Settings.Default.The100Username, Settings.Default.The100Password );
             if( login.ShowDialog() == DialogResult.OK )
             {
@@ -244,6 +257,13 @@ namespace The100AutoMod
 
                 SendLogin();
             }
+        }
+
+        private void AppendMessage( Message m )
+        {
+            uiChat.AppendText( "{Username}: {Content}".Inject( m ) + Environment.NewLine );
+            uiChat.SelectionStart = uiChat.TextLength;
+            uiChat.ScrollToCaret();
         }
     }
 }

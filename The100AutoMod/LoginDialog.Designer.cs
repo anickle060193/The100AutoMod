@@ -28,87 +28,87 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this._usernameLabel = new System.Windows.Forms.Label();
-            this._passwordLabel = new System.Windows.Forms.Label();
-            this._usernameText = new System.Windows.Forms.TextBox();
-            this._passwordText = new System.Windows.Forms.TextBox();
-            this._cancelButton = new System.Windows.Forms.Button();
-            this._okButton = new System.Windows.Forms.Button();
+            this.uiUsernameLabel = new System.Windows.Forms.Label();
+            this.uiPasswordLabel = new System.Windows.Forms.Label();
+            this.uiUsernameText = new System.Windows.Forms.TextBox();
+            this.uiPasswordText = new System.Windows.Forms.TextBox();
+            this.uiCancelButton = new System.Windows.Forms.Button();
+            this.uiOkButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // _usernameLabel
+            // uiUsernameLabel
             // 
-            this._usernameLabel.AutoSize = true;
-            this._usernameLabel.Location = new System.Drawing.Point(12, 15);
-            this._usernameLabel.Name = "_usernameLabel";
-            this._usernameLabel.Size = new System.Drawing.Size(58, 13);
-            this._usernameLabel.TabIndex = 0;
-            this._usernameLabel.Text = "Username:";
+            this.uiUsernameLabel.AutoSize = true;
+            this.uiUsernameLabel.Location = new System.Drawing.Point(12, 15);
+            this.uiUsernameLabel.Name = "uiUsernameLabel";
+            this.uiUsernameLabel.Size = new System.Drawing.Size(58, 13);
+            this.uiUsernameLabel.TabIndex = 0;
+            this.uiUsernameLabel.Text = "Username:";
             // 
-            // _passwordLabel
+            // uiPasswordLabel
             // 
-            this._passwordLabel.AutoSize = true;
-            this._passwordLabel.Location = new System.Drawing.Point(12, 41);
-            this._passwordLabel.Name = "_passwordLabel";
-            this._passwordLabel.Size = new System.Drawing.Size(56, 13);
-            this._passwordLabel.TabIndex = 1;
-            this._passwordLabel.Text = "Password:";
+            this.uiPasswordLabel.AutoSize = true;
+            this.uiPasswordLabel.Location = new System.Drawing.Point(12, 41);
+            this.uiPasswordLabel.Name = "uiPasswordLabel";
+            this.uiPasswordLabel.Size = new System.Drawing.Size(56, 13);
+            this.uiPasswordLabel.TabIndex = 1;
+            this.uiPasswordLabel.Text = "Password:";
             // 
-            // _usernameText
+            // uiUsernameText
             // 
-            this._usernameText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.uiUsernameText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this._usernameText.Location = new System.Drawing.Point(76, 12);
-            this._usernameText.Name = "_usernameText";
-            this._usernameText.Size = new System.Drawing.Size(254, 20);
-            this._usernameText.TabIndex = 2;
+            this.uiUsernameText.Location = new System.Drawing.Point(76, 12);
+            this.uiUsernameText.Name = "uiUsernameText";
+            this.uiUsernameText.Size = new System.Drawing.Size(254, 20);
+            this.uiUsernameText.TabIndex = 2;
             // 
-            // _passwordText
+            // uiPasswordText
             // 
-            this._passwordText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.uiPasswordText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this._passwordText.Location = new System.Drawing.Point(76, 38);
-            this._passwordText.Name = "_passwordText";
-            this._passwordText.Size = new System.Drawing.Size(254, 20);
-            this._passwordText.TabIndex = 3;
-            this._passwordText.UseSystemPasswordChar = true;
+            this.uiPasswordText.Location = new System.Drawing.Point(76, 38);
+            this.uiPasswordText.Name = "uiPasswordText";
+            this.uiPasswordText.Size = new System.Drawing.Size(254, 20);
+            this.uiPasswordText.TabIndex = 3;
+            this.uiPasswordText.UseSystemPasswordChar = true;
             // 
-            // _cancelButton
+            // uiCancelButton
             // 
-            this._cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this._cancelButton.Location = new System.Drawing.Point(255, 64);
-            this._cancelButton.Name = "_cancelButton";
-            this._cancelButton.Size = new System.Drawing.Size(75, 23);
-            this._cancelButton.TabIndex = 4;
-            this._cancelButton.Text = "Cancel";
-            this._cancelButton.UseVisualStyleBackColor = true;
+            this.uiCancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.uiCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.uiCancelButton.Location = new System.Drawing.Point(255, 64);
+            this.uiCancelButton.Name = "uiCancelButton";
+            this.uiCancelButton.Size = new System.Drawing.Size(75, 23);
+            this.uiCancelButton.TabIndex = 4;
+            this.uiCancelButton.Text = "Cancel";
+            this.uiCancelButton.UseVisualStyleBackColor = true;
             // 
-            // _okButton
+            // uiOkButton
             // 
-            this._okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this._okButton.Location = new System.Drawing.Point(174, 64);
-            this._okButton.Name = "_okButton";
-            this._okButton.Size = new System.Drawing.Size(75, 23);
-            this._okButton.TabIndex = 5;
-            this._okButton.Text = "OK";
-            this._okButton.UseVisualStyleBackColor = true;
+            this.uiOkButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.uiOkButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.uiOkButton.Location = new System.Drawing.Point(174, 64);
+            this.uiOkButton.Name = "uiOkButton";
+            this.uiOkButton.Size = new System.Drawing.Size(75, 23);
+            this.uiOkButton.TabIndex = 5;
+            this.uiOkButton.Text = "OK";
+            this.uiOkButton.UseVisualStyleBackColor = true;
             // 
             // LoginDialog
             // 
-            this.AcceptButton = this._okButton;
+            this.AcceptButton = this.uiOkButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this._cancelButton;
+            this.CancelButton = this.uiCancelButton;
             this.ClientSize = new System.Drawing.Size(342, 94);
             this.ControlBox = false;
-            this.Controls.Add(this._okButton);
-            this.Controls.Add(this._cancelButton);
-            this.Controls.Add(this._passwordText);
-            this.Controls.Add(this._usernameText);
-            this.Controls.Add(this._passwordLabel);
-            this.Controls.Add(this._usernameLabel);
+            this.Controls.Add(this.uiOkButton);
+            this.Controls.Add(this.uiCancelButton);
+            this.Controls.Add(this.uiPasswordText);
+            this.Controls.Add(this.uiUsernameText);
+            this.Controls.Add(this.uiPasswordLabel);
+            this.Controls.Add(this.uiUsernameLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "LoginDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -119,11 +119,11 @@
         }
 
         #endregion
-        private System.Windows.Forms.Label _usernameLabel;
-        private System.Windows.Forms.Label _passwordLabel;
-        private System.Windows.Forms.TextBox _usernameText;
-        private System.Windows.Forms.TextBox _passwordText;
-        private System.Windows.Forms.Button _cancelButton;
-        private System.Windows.Forms.Button _okButton;
+        private System.Windows.Forms.Label uiUsernameLabel;
+        private System.Windows.Forms.Label uiPasswordLabel;
+        private System.Windows.Forms.TextBox uiUsernameText;
+        private System.Windows.Forms.TextBox uiPasswordText;
+        private System.Windows.Forms.Button uiCancelButton;
+        private System.Windows.Forms.Button uiOkButton;
     }
 }

@@ -57,21 +57,9 @@ namespace The100AutoMod
         /// <remarks>Uses <see cref="String.Format()"/> internally; custom formats should match those used for that method.</remarks>
         /// </summary>
         /// <param name="formatString">The format string, containing keys like {foo} and {foo:SomeFormat}.</param>
-        /// <param name="dictionary">An <see cref="IDictionary"/> with keys and values to inject into the string</param>
+        /// <param name="attributes">An <see cref="IDictionary"/> with keys and values to inject into the string</param>
         /// <returns>A version of the formatString string with dictionary keys replaced by (formatted) key values.</returns>
-        public static string Inject( this string formatString, IDictionary dictionary )
-        {
-            return formatString.Inject( new Hashtable( dictionary ) );
-        }
-
-        /// <summary>
-        /// Extension method that replaces keys in a string with the values of matching hashtable entries.
-        /// <remarks>Uses <see cref="String.Format()"/> internally; custom formats should match those used for that method.</remarks>
-        /// </summary>
-        /// <param name="formatString">The format string, containing keys like {foo} and {foo:SomeFormat}.</param>
-        /// <param name="attributes">A <see cref="Hashtable"/> with keys and values to inject into the string</param>
-        /// <returns>A version of the formatString string with hastable keys replaced by (formatted) key values.</returns>
-        public static string Inject( this string formatString, Hashtable attributes )
+        public static string Inject( this string formatString, IDictionary attributes )
         {
             string result = formatString;
             if( attributes == null || formatString == null )
@@ -91,7 +79,7 @@ namespace The100AutoMod
         /// <param name="key">The key name (foo)</param>
         /// <param name="replacementValue">The replacement value; if null is replaced with an empty string</param>
         /// <returns>The input string with any instances of the key replaced with the replacement value</returns>
-        public static string InjectSingleValue( this string formatString, string key, object replacementValue )
+        private static string InjectSingleValue( this string formatString, string key, object replacementValue )
         {
             string result = formatString;
             //regex replacement of key with value, where the generic key format is:

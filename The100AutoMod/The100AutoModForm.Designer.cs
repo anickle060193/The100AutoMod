@@ -29,87 +29,120 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this._menuStrip = new System.Windows.Forms.MenuStrip();
-            this._notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this._notifyIconContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this._openNotifyIconMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._exitNotifyIconMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._optionsMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this._toggleDevToolsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._menuStrip.SuspendLayout();
-            this._notifyIconContextMenu.SuspendLayout();
+            this.uiMenuStrip = new System.Windows.Forms.MenuStrip();
+            this.uiOptionsMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.uiToggleDevToolsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uiExitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uiNotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.uiNotifyIconContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.uiOpenNotifyIconMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uiExitNotifyIconMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uiSplitLayout = new System.Windows.Forms.SplitContainer();
+            this.uiChat = new System.Windows.Forms.TextBox();
+            this.uiMenuStrip.SuspendLayout();
+            this.uiNotifyIconContextMenu.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uiSplitLayout)).BeginInit();
+            this.uiSplitLayout.Panel2.SuspendLayout();
+            this.uiSplitLayout.SuspendLayout();
             this.SuspendLayout();
             // 
-            // _menuStrip
+            // uiMenuStrip
             // 
-            this._menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._optionsMenu});
-            this._menuStrip.Location = new System.Drawing.Point(0, 0);
-            this._menuStrip.Name = "_menuStrip";
-            this._menuStrip.Size = new System.Drawing.Size(984, 24);
-            this._menuStrip.TabIndex = 0;
-            this._menuStrip.Text = "menuStrip1";
+            this.uiMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.uiOptionsMenu});
+            this.uiMenuStrip.Location = new System.Drawing.Point(0, 0);
+            this.uiMenuStrip.Name = "uiMenuStrip";
+            this.uiMenuStrip.Size = new System.Drawing.Size(984, 24);
+            this.uiMenuStrip.TabIndex = 0;
             // 
-            // _notifyIcon
+            // uiOptionsMenu
             // 
-            this._notifyIcon.ContextMenuStrip = this._notifyIconContextMenu;
-            this._notifyIcon.Text = "the100.io AutoMod";
+            this.uiOptionsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.uiToggleDevToolsMenuItem,
+            this.uiExitMenuItem});
+            this.uiOptionsMenu.Name = "uiOptionsMenu";
+            this.uiOptionsMenu.Size = new System.Drawing.Size(61, 20);
+            this.uiOptionsMenu.Text = "Options";
             // 
-            // _notifyIconContextMenu
+            // uiToggleDevToolsMenuItem
             // 
-            this._notifyIconContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._openNotifyIconMenuItem,
-            this._exitNotifyIconMenuItem});
-            this._notifyIconContextMenu.Name = "_notifyIconContextMenu";
-            this._notifyIconContextMenu.Size = new System.Drawing.Size(104, 48);
+            this.uiToggleDevToolsMenuItem.Name = "uiToggleDevToolsMenuItem";
+            this.uiToggleDevToolsMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.uiToggleDevToolsMenuItem.Text = "Toggle Dev Tools";
             // 
-            // _openNotifyIconMenuItem
+            // uiExitMenuItem
             // 
-            this._openNotifyIconMenuItem.Name = "_openNotifyIconMenuItem";
-            this._openNotifyIconMenuItem.Size = new System.Drawing.Size(103, 22);
-            this._openNotifyIconMenuItem.Text = "Open";
+            this.uiExitMenuItem.Name = "uiExitMenuItem";
+            this.uiExitMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.uiExitMenuItem.Text = "Exit";
             // 
-            // _exitNotifyIconMenuItem
+            // uiNotifyIcon
             // 
-            this._exitNotifyIconMenuItem.Name = "_exitNotifyIconMenuItem";
-            this._exitNotifyIconMenuItem.Size = new System.Drawing.Size(103, 22);
-            this._exitNotifyIconMenuItem.Text = "Exit";
+            this.uiNotifyIcon.ContextMenuStrip = this.uiNotifyIconContextMenu;
+            this.uiNotifyIcon.Text = "the100.io AutoMod";
             // 
-            // _optionsMenu
+            // uiNotifyIconContextMenu
             // 
-            this._optionsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._toggleDevToolsMenuItem,
-            this._exitMenuItem});
-            this._optionsMenu.Name = "_optionsMenu";
-            this._optionsMenu.Size = new System.Drawing.Size(61, 20);
-            this._optionsMenu.Text = "Options";
+            this.uiNotifyIconContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.uiOpenNotifyIconMenuItem,
+            this.uiExitNotifyIconMenuItem});
+            this.uiNotifyIconContextMenu.Name = "_notifyIconContextMenu";
+            this.uiNotifyIconContextMenu.Size = new System.Drawing.Size(104, 48);
             // 
-            // _toggleDevToolsMenuItem
+            // uiOpenNotifyIconMenuItem
             // 
-            this._toggleDevToolsMenuItem.Name = "_toggleDevToolsMenuItem";
-            this._toggleDevToolsMenuItem.Size = new System.Drawing.Size(164, 22);
-            this._toggleDevToolsMenuItem.Text = "Toggle Dev Tools";
+            this.uiOpenNotifyIconMenuItem.Name = "uiOpenNotifyIconMenuItem";
+            this.uiOpenNotifyIconMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.uiOpenNotifyIconMenuItem.Text = "Open";
             // 
-            // _exitMenuItem
+            // uiExitNotifyIconMenuItem
             // 
-            this._exitMenuItem.Name = "_exitMenuItem";
-            this._exitMenuItem.Size = new System.Drawing.Size(164, 22);
-            this._exitMenuItem.Text = "Exit";
+            this.uiExitNotifyIconMenuItem.Name = "uiExitNotifyIconMenuItem";
+            this.uiExitNotifyIconMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.uiExitNotifyIconMenuItem.Text = "Exit";
+            // 
+            // uiSplitLayout
+            // 
+            this.uiSplitLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uiSplitLayout.Location = new System.Drawing.Point(0, 24);
+            this.uiSplitLayout.Name = "uiSplitLayout";
+            // 
+            // uiSplitLayout.Panel2
+            // 
+            this.uiSplitLayout.Panel2.Controls.Add(this.uiChat);
+            this.uiSplitLayout.Panel2.Padding = new System.Windows.Forms.Padding(3);
+            this.uiSplitLayout.Size = new System.Drawing.Size(984, 637);
+            this.uiSplitLayout.SplitterDistance = 700;
+            this.uiSplitLayout.TabIndex = 1;
+            // 
+            // uiChat
+            // 
+            this.uiChat.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uiChat.Location = new System.Drawing.Point(3, 3);
+            this.uiChat.Multiline = true;
+            this.uiChat.Name = "uiChat";
+            this.uiChat.ReadOnly = true;
+            this.uiChat.Size = new System.Drawing.Size(274, 631);
+            this.uiChat.TabIndex = 0;
             // 
             // The100AutoModForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 661);
-            this.Controls.Add(this._menuStrip);
-            this.MainMenuStrip = this._menuStrip;
+            this.Controls.Add(this.uiSplitLayout);
+            this.Controls.Add(this.uiMenuStrip);
+            this.MainMenuStrip = this.uiMenuStrip;
             this.Name = "The100AutoModForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "the100.io AutoMod";
-            this._menuStrip.ResumeLayout(false);
-            this._menuStrip.PerformLayout();
-            this._notifyIconContextMenu.ResumeLayout(false);
+            this.uiMenuStrip.ResumeLayout(false);
+            this.uiMenuStrip.PerformLayout();
+            this.uiNotifyIconContextMenu.ResumeLayout(false);
+            this.uiSplitLayout.Panel2.ResumeLayout(false);
+            this.uiSplitLayout.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uiSplitLayout)).EndInit();
+            this.uiSplitLayout.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -117,14 +150,16 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip _menuStrip;
-        private System.Windows.Forms.NotifyIcon _notifyIcon;
-        private System.Windows.Forms.ContextMenuStrip _notifyIconContextMenu;
-        private System.Windows.Forms.ToolStripMenuItem _openNotifyIconMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem _exitNotifyIconMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem _optionsMenu;
-        private System.Windows.Forms.ToolStripMenuItem _toggleDevToolsMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem _exitMenuItem;
+        private System.Windows.Forms.MenuStrip uiMenuStrip;
+        private System.Windows.Forms.NotifyIcon uiNotifyIcon;
+        private System.Windows.Forms.ContextMenuStrip uiNotifyIconContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem uiOpenNotifyIconMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem uiExitNotifyIconMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem uiOptionsMenu;
+        private System.Windows.Forms.ToolStripMenuItem uiToggleDevToolsMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem uiExitMenuItem;
+        private System.Windows.Forms.SplitContainer uiSplitLayout;
+        private System.Windows.Forms.TextBox uiChat;
     }
 }
 

@@ -16,12 +16,12 @@ namespace The100AutoMod
         {
             get
             {
-                return _usernameText.Text;
+                return uiUsernameText.Text;
             }
 
             private set
             {
-                _usernameText.Text = value;
+                uiUsernameText.Text = value;
             }
         }
 
@@ -29,12 +29,12 @@ namespace The100AutoMod
         {
             get
             {
-                return _passwordText.Text;
+                return uiPasswordText.Text;
             }
 
             private set
             {
-                _passwordText.Text = value;
+                uiPasswordText.Text = value;
             }
         }
 

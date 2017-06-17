@@ -34,16 +34,15 @@
             this.uiOpenNotifyIconMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uiExitNotifyIconMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uiSplitLayout = new System.Windows.Forms.SplitContainer();
-            this.uiBrowserTabs = new System.Windows.Forms.TabControl();
-            this.uiChatTab = new System.Windows.Forms.TabPage();
-            this.uiModTab = new System.Windows.Forms.TabPage();
             this.uiChat = new System.Windows.Forms.TextBox();
+            this.uiBrowserSplitContainer = new System.Windows.Forms.SplitContainer();
             this.uiNotifyIconContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uiSplitLayout)).BeginInit();
             this.uiSplitLayout.Panel1.SuspendLayout();
             this.uiSplitLayout.Panel2.SuspendLayout();
             this.uiSplitLayout.SuspendLayout();
-            this.uiBrowserTabs.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.uiBrowserSplitContainer)).BeginInit();
+            this.uiBrowserSplitContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // uiNotifyIcon
@@ -74,12 +73,13 @@
             // uiSplitLayout
             // 
             this.uiSplitLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uiSplitLayout.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.uiSplitLayout.Location = new System.Drawing.Point(0, 0);
             this.uiSplitLayout.Name = "uiSplitLayout";
             // 
             // uiSplitLayout.Panel1
             // 
-            this.uiSplitLayout.Panel1.Controls.Add(this.uiBrowserTabs);
+            this.uiSplitLayout.Panel1.Controls.Add(this.uiBrowserSplitContainer);
             // 
             // uiSplitLayout.Panel2
             // 
@@ -88,37 +88,6 @@
             this.uiSplitLayout.Size = new System.Drawing.Size(984, 661);
             this.uiSplitLayout.SplitterDistance = 700;
             this.uiSplitLayout.TabIndex = 1;
-            // 
-            // uiBrowserTabs
-            // 
-            this.uiBrowserTabs.Controls.Add(this.uiChatTab);
-            this.uiBrowserTabs.Controls.Add(this.uiModTab);
-            this.uiBrowserTabs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uiBrowserTabs.Location = new System.Drawing.Point(0, 0);
-            this.uiBrowserTabs.Name = "uiBrowserTabs";
-            this.uiBrowserTabs.SelectedIndex = 0;
-            this.uiBrowserTabs.Size = new System.Drawing.Size(700, 661);
-            this.uiBrowserTabs.TabIndex = 0;
-            // 
-            // uiChatTab
-            // 
-            this.uiChatTab.Location = new System.Drawing.Point(4, 22);
-            this.uiChatTab.Name = "uiChatTab";
-            this.uiChatTab.Padding = new System.Windows.Forms.Padding(3);
-            this.uiChatTab.Size = new System.Drawing.Size(692, 635);
-            this.uiChatTab.TabIndex = 0;
-            this.uiChatTab.Text = "Chat";
-            this.uiChatTab.UseVisualStyleBackColor = true;
-            // 
-            // uiModTab
-            // 
-            this.uiModTab.Location = new System.Drawing.Point(4, 22);
-            this.uiModTab.Name = "uiModTab";
-            this.uiModTab.Padding = new System.Windows.Forms.Padding(3);
-            this.uiModTab.Size = new System.Drawing.Size(692, 635);
-            this.uiModTab.TabIndex = 1;
-            this.uiModTab.Text = "Mod";
-            this.uiModTab.UseVisualStyleBackColor = true;
             // 
             // uiChat
             // 
@@ -129,6 +98,15 @@
             this.uiChat.ReadOnly = true;
             this.uiChat.Size = new System.Drawing.Size(274, 655);
             this.uiChat.TabIndex = 0;
+            // 
+            // uiBrowserSplitContainer
+            // 
+            this.uiBrowserSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uiBrowserSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this.uiBrowserSplitContainer.Name = "uiBrowserSplitContainer";
+            this.uiBrowserSplitContainer.Size = new System.Drawing.Size(700, 661);
+            this.uiBrowserSplitContainer.SplitterDistance = 233;
+            this.uiBrowserSplitContainer.TabIndex = 0;
             // 
             // The100AutoModForm
             // 
@@ -145,7 +123,8 @@
             this.uiSplitLayout.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uiSplitLayout)).EndInit();
             this.uiSplitLayout.ResumeLayout(false);
-            this.uiBrowserTabs.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.uiBrowserSplitContainer)).EndInit();
+            this.uiBrowserSplitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -157,9 +136,7 @@
         private System.Windows.Forms.ToolStripMenuItem uiExitNotifyIconMenuItem;
         private System.Windows.Forms.SplitContainer uiSplitLayout;
         private System.Windows.Forms.TextBox uiChat;
-        private System.Windows.Forms.TabControl uiBrowserTabs;
-        private System.Windows.Forms.TabPage uiChatTab;
-        private System.Windows.Forms.TabPage uiModTab;
+        private System.Windows.Forms.SplitContainer uiBrowserSplitContainer;
     }
 }
 

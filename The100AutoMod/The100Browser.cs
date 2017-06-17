@@ -23,7 +23,7 @@ namespace The100AutoMod
 
         private bool _loginAttempted;
 
-        public The100Browser() : base( THE100_LOGIN_URL )
+        public The100Browser() : base( "" )
         {
             base.FrameLoadEnd += The100Browser_FrameLoadEnd;
         }
@@ -79,6 +79,11 @@ namespace The100AutoMod
                 password = password
             };
             this.ExecuteScriptAsync( Resources.The100Browser_LoginScript.Inject( auth ) );
+        }
+
+        public void StartLogin()
+        {
+            this.Load( THE100_LOGIN_URL );
         }
     }
 

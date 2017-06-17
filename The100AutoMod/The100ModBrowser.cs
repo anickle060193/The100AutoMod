@@ -41,7 +41,6 @@ namespace The100AutoMod
             base.OnLoggedIn( e );
 
             this.Load( THE100_MOD_URL );
-            this.ShowDevTools();
         }
 
         protected override async void OnFrameLoadEnd( FrameLoadEndEventArgs e )

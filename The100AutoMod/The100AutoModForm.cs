@@ -20,7 +20,7 @@ namespace The100AutoMod
 
         private static readonly String THE100_CHAT_URL = "https://www.the100.io/groups/268/chatroom";
 
-        //private The100ChatBrowser _chatBrowser;
+        private The100ChatBrowser _chatBrowser;
         private The100ModBrowser _modBrowser;
 
         public The100AutoModForm()
@@ -47,19 +47,18 @@ namespace The100AutoMod
             };
             LOG.DebugInject( "InitializeChromium - Chromium: {chromium}, CEF: {cef}, CefSharp: {cefsharp}, Environment: {environment}", initInfo );
 
-            //_chatBrowser = new The100ChatBrowser( THE100_CHAT_URL );
-            //_chatBrowser.Dock = DockStyle.Fill;
-            //_chatBrowser.LoginPrompt += Browser_LoginPrompt;
-            //_chatBrowser.LoggedIn += ChatBrowser_LoggedIn;
-            //_chatBrowser.ChatMessageReceived += ChatBrowser_ChatMessageReceived;
-            //uiChatTab.Controls.Add( _chatBrowser );
+            _chatBrowser = new The100ChatBrowser( THE100_CHAT_URL );
+            _chatBrowser.Dock = DockStyle.Fill;
+            _chatBrowser.LoginPrompt += Browser_LoginPrompt;
+            _chatBrowser.LoggedIn += ChatBrowser_LoggedIn;
+            _chatBrowser.ChatMessageReceived += ChatBrowser_ChatMessageReceived;
+            _chatBrowser.IsBrowserInitializedChanged += ChatBrowser_IsBrowserInitializedChanged;
+            uiBrowserSplitContainer.Panel2.Controls.Add( _chatBrowser );
 
             _modBrowser = new The100ModBrowser();
             _modBrowser.Dock = DockStyle.Fill;
             _modBrowser.LoginPrompt += Browser_LoginPrompt;
-            uiModTab.Controls.Add( _modBrowser );
-
-            uiChatTab.Hide();
+            uiBrowserSplitContainer.Panel1.Controls.Add( _modBrowser );
         }
 
         private void InitializeNotifyIcon()
@@ -149,7 +148,7 @@ namespace The100AutoMod
         {
             LOG.DebugInject( "FormClosing - Reason: {CloseReason}", e );
 
-            //_chatBrowser.Dispose();
+            _chatBrowser.Dispose();
             _modBrowser.Dispose();
         }
 
@@ -168,13 +167,19 @@ namespace The100AutoMod
 
         private void ChatBrowser_LoggedIn( object sender, EventArgs e )
         {
-            //_chatBrowser.GotoChat();
+            _chatBrowser.GotoChat();
+            _modBrowser.StartLogin();
         }
 
         private void ChatBrowser_ChatMessageReceived( object sender, ChatMessageReceivedEventArgs e )
         {
             LOG.DebugInject( "ChatMessageReceived - {Message}", e.Message );
             this.UiBeginInvoke( (Action<ChatMessage>)AppendMessage, e.Message );
+        }
+
+        private void ChatBrowser_IsBrowserInitializedChanged( object sender, IsBrowserInitializedChangedEventArgs e )
+        {
+            _chatBrowser.StartLogin();
         }
 
         private void ShowMe()

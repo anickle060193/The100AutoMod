@@ -18,38 +18,19 @@ namespace The100AutoMod
     {
         private static readonly ILog LOG = LogManager.GetLogger( typeof( The100AutoModForm ) );
 
-        private static readonly String THE100_LOGIN_URL = "https://www.the100.io/login";
-        private static readonly String THE100_AFTER_LOGIN_URL = "https://www.the100.io/users/264831/dashboard";
-        private static readonly String THE100_CHAT_URL = "https://www.the100.io/groups/268/chatroom";
-
-        private ChromiumWebBrowser uiBrowser;
-
-        private The100AutoModBoundObject _bound;
-        private bool _loginAttempted;
+        private The100ChatBrowser _chatBrowser;
 
         public The100AutoModForm()
         {
             LOG.Debug( "Constructor" );
             InitializeComponent();
-            InitializeBound();
             InitializeChromium();
             InitializeNotifyIcon();
             InitializeFromSettings();
 
-            _loginAttempted = false;
-
             this.Resize += The100AutoModForm_Resize;
             this.ResizeEnd += The100AutoModForm_ResizeEnd;
             this.FormClosing += The100AutoModForm_FormClosing;
-
-            uiToggleDevToolsMenuItem.Click += UiToggleDevToolsMenuItem_Click;
-            uiExitMenuItem.Click += UiExitMenuItem_Click;
-        }
-
-        private void InitializeBound()
-        {
-            _bound = new The100AutoModBoundObject();
-            _bound.MessageReceived += Bound_NewMessageReceived;
         }
 
         private void InitializeChromium()
@@ -63,15 +44,12 @@ namespace The100AutoMod
             };
             LOG.DebugInject( "InitializeChromium - Chromium: {chromium}, CEF: {cef}, CefSharp: {cefsharp}, Environment: {environment}", initInfo );
 
-            uiBrowser = new ChromiumWebBrowser( THE100_LOGIN_URL );
-            uiSplitLayout.Panel1.Controls.Add( uiBrowser );
-            uiBrowser.Dock = DockStyle.Fill;
-            uiBrowser.BringToFront();
+            _chatBrowser = new The100ChatBrowser();
+            uiChatTab.Controls.Add( _chatBrowser );
+            _chatBrowser.Dock = DockStyle.Fill;
 
-            uiBrowser.IsBrowserInitializedChanged += UiBrowser_IsBrowserInitializedChanged;
-            uiBrowser.FrameLoadEnd += UiBrowser_FrameLoadEnd;
-            
-            uiBrowser.RegisterAsyncJsObject( "The100AutoMod", _bound );
+            _chatBrowser.LoginPrompt += ChatBrowser_LoginPrompt;
+            _chatBrowser.ChatMessageReceived += ChatBrowser_ChatMessageReceived;
         }
 
         private void InitializeNotifyIcon()
@@ -161,67 +139,26 @@ namespace The100AutoMod
         {
             LOG.DebugInject( "FormClosing - Reason: {CloseReason}", e );
 
-            uiBrowser.Dispose();
+            _chatBrowser.Dispose();
         }
 
-        private void UiToggleDevToolsMenuItem_Click( object sender, EventArgs e )
+        private void ChatBrowser_LoginPrompt( object sender, LoginPromptEventArgs e )
         {
-            if( uiBrowser.IsBrowserInitialized )
+            if( !e.RePrompt )
             {
-                uiBrowser.ShowDevTools();
+                e.Username = Settings.Default.The100Username;
+                e.Password = Settings.Default.The100Password;
+            }
+            else
+            {
+                this.Invoke( (Action<LoginPromptEventArgs>)PromptLogin, e );
             }
         }
 
-        private void UiExitMenuItem_Click( object sender, EventArgs e )
+        private void ChatBrowser_ChatMessageReceived( object sender, ChatMessageReceivedEventArgs e )
         {
-            this.Close();
-        }
-
-        private void Bound_NewMessageReceived( object sender, MessageReceivedEventArgs e )
-        {
-            LOG.DebugInject( "NewMessageReceived - {Message}", e );
-
-            this.UiBeginInvoke( (Action<Message>)AppendMessage, e.Message );
-        }
-
-        private void UiBrowser_IsBrowserInitializedChanged( object sender, IsBrowserInitializedChangedEventArgs e )
-        {
-            LOG.DebugInject( "Browser_IsBrowserInitializedChanged - IsInitialized: {IsBrowserInitialized}", e );
-
-            uiToggleDevToolsMenuItem.Enabled = e.IsBrowserInitialized;
-        }
-
-        private void UiBrowser_FrameLoadEnd( object sender, FrameLoadEndEventArgs e )
-        {
-            LOG.DebugInject( "Browser_FrameLoadEnd - URL: {Url} - Status Code: {HttpStatusCode}", e );
-
-            if( e.Url == THE100_LOGIN_URL )
-            {
-                LOG.Debug( "Browser_FrameLoadEnd - Login" );
-
-                if( _loginAttempted )
-                {
-                    this.UiBeginInvoke( (Action)PromptLogin );
-                }
-                else
-                {
-                    _loginAttempted = true;
-
-                    SendLogin();
-                }
-            }
-            else if( e.Url == THE100_AFTER_LOGIN_URL )
-            {
-                LOG.Debug( "Browser_FrameLoadEnd - After Login" );
-
-                uiBrowser.Load( THE100_CHAT_URL );
-            }
-            else if( e.Url == THE100_CHAT_URL )
-            {
-                LOG.Debug( "Browser_FrameLoaded - Chat" );
-
-                uiBrowser.ExecuteScriptAsync( Resources.CreateChatListenerScript );
-            }
+            LOG.DebugInject( "ChatMessageReceived - {Message}", e.Message );
+            this.UiBeginInvoke( (Action<ChatMessage>)AppendMessage, e.Message );
         }
 
         private void ShowMe()
@@ -235,17 +172,7 @@ namespace The100AutoMod
             uiNotifyIcon.Visible = false;
         }
 
-        private void SendLogin()
-        {
-            var auth = new
-            {
-                username = Settings.Default.The100Username,
-                password = Settings.Default.The100Password
-            };
-            uiBrowser.ExecuteScriptAsync( Resources.LoginScript.Inject( auth ) );
-        }
-
-        private void PromptLogin()
+        private void PromptLogin( LoginPromptEventArgs e )
         {
             ShowMe();
             LoginDialog login = new LoginDialog( Settings.Default.The100Username, Settings.Default.The100Password );
@@ -255,11 +182,16 @@ namespace The100AutoMod
                 Settings.Default.The100Password = login.Password;
                 Settings.Default.Save();
 
-                SendLogin();
+                e.Username = Settings.Default.The100Username;
+                e.Password = Settings.Default.The100Password;
+            }
+            else
+            {
+                e.CancelLogin = true;
             }
         }
 
-        private void AppendMessage( Message m )
+        private void AppendMessage( ChatMessage m )
         {
             uiChat.AppendText( "{Username}: {Content}".Inject( m ) + Environment.NewLine );
             uiChat.SelectionStart = uiChat.TextLength;

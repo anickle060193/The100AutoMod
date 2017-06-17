@@ -64,7 +64,6 @@
     <Compile Include="LoginDialog.Designer.cs">
       <DependentUpon>LoginDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="The100AutoModBoundObject.cs" />
     <Compile Include="The100AutoModForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -73,6 +72,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="The100Browser.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="The100ChatBrowser.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Util.cs" />
     <EmbeddedResource Include="LoginDialog.resx">
       <DependentUpon>LoginDialog.cs</DependentUpon>

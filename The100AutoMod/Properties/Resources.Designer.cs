@@ -61,6 +61,17 @@ namespace The100AutoMod.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to $( &apos;#gamertag&apos; ).val( &apos;{username}&apos; );
+        ///$( &apos;#password&apos; ).val( &apos;{password}&apos; );
+        ///$( &apos;input[type=\&quot;submit\&quot;][name=\&quot;commit\&quot;]&apos; ).click();.
+        /// </summary>
+        internal static string The100Browser_LoginScript {
+            get {
+                return ResourceManager.GetString("The100Browser_LoginScript", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ( function()
         ///{
         ///    var target = document.querySelector( &quot;ul.messages&quot; );
@@ -80,20 +91,9 @@ namespace The100AutoMod.Properties {
         ///                    var username = addedNode.dataset.from;
         ///                     [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string CreateChatListenerScript {
+        internal static string The100ChatBrowser_CreateChatListenerScript {
             get {
-                return ResourceManager.GetString("CreateChatListenerScript", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to $( &apos;#gamertag&apos; ).val( &apos;{username}&apos; );
-        ///$( &apos;#password&apos; ).val( &apos;{password}&apos; );
-        ///$( &apos;input[type=\&quot;submit\&quot;][name=\&quot;commit\&quot;]&apos; ).click();.
-        /// </summary>
-        internal static string LoginScript {
-            get {
-                return ResourceManager.GetString("LoginScript", resourceCulture);
+                return ResourceManager.GetString("The100ChatBrowser_CreateChatListenerScript", resourceCulture);
             }
         }
     }

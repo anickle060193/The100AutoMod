@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="CreateChatListenerScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\js\createchatlistenerscript.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="The100Browser_LoginScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\js\the100browser_loginscript.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="LoginScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\js\loginscript.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="The100ChatBrowser_CreateChatListenerScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\js\the100chatbrowser_createchatlistenerscript.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

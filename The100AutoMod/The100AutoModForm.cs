@@ -18,7 +18,10 @@ namespace The100AutoMod
     {
         private static readonly ILog LOG = LogManager.GetLogger( typeof( The100AutoModForm ) );
 
-        private The100ChatBrowser _chatBrowser;
+        private static readonly String THE100_CHAT_URL = "https://www.the100.io/groups/268/chatroom";
+
+        //private The100ChatBrowser _chatBrowser;
+        private The100ModBrowser _modBrowser;
 
         public The100AutoModForm()
         {
@@ -44,12 +47,19 @@ namespace The100AutoMod
             };
             LOG.DebugInject( "InitializeChromium - Chromium: {chromium}, CEF: {cef}, CefSharp: {cefsharp}, Environment: {environment}", initInfo );
 
-            _chatBrowser = new The100ChatBrowser();
-            uiChatTab.Controls.Add( _chatBrowser );
-            _chatBrowser.Dock = DockStyle.Fill;
+            //_chatBrowser = new The100ChatBrowser( THE100_CHAT_URL );
+            //_chatBrowser.Dock = DockStyle.Fill;
+            //_chatBrowser.LoginPrompt += Browser_LoginPrompt;
+            //_chatBrowser.LoggedIn += ChatBrowser_LoggedIn;
+            //_chatBrowser.ChatMessageReceived += ChatBrowser_ChatMessageReceived;
+            //uiChatTab.Controls.Add( _chatBrowser );
 
-            _chatBrowser.LoginPrompt += ChatBrowser_LoginPrompt;
-            _chatBrowser.ChatMessageReceived += ChatBrowser_ChatMessageReceived;
+            _modBrowser = new The100ModBrowser();
+            _modBrowser.Dock = DockStyle.Fill;
+            _modBrowser.LoginPrompt += Browser_LoginPrompt;
+            uiModTab.Controls.Add( _modBrowser );
+
+            uiChatTab.Hide();
         }
 
         private void InitializeNotifyIcon()
@@ -139,10 +149,11 @@ namespace The100AutoMod
         {
             LOG.DebugInject( "FormClosing - Reason: {CloseReason}", e );
 
-            _chatBrowser.Dispose();
+            //_chatBrowser.Dispose();
+            _modBrowser.Dispose();
         }
 
-        private void ChatBrowser_LoginPrompt( object sender, LoginPromptEventArgs e )
+        private void Browser_LoginPrompt( object sender, LoginPromptEventArgs e )
         {
             if( !e.RePrompt )
             {
@@ -153,6 +164,11 @@ namespace The100AutoMod
             {
                 this.Invoke( (Action<LoginPromptEventArgs>)PromptLogin, e );
             }
+        }
+
+        private void ChatBrowser_LoggedIn( object sender, EventArgs e )
+        {
+            //_chatBrowser.GotoChat();
         }
 
         private void ChatBrowser_ChatMessageReceived( object sender, ChatMessageReceivedEventArgs e )

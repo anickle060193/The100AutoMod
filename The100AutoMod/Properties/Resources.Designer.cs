@@ -96,5 +96,115 @@ namespace The100AutoMod.Properties {
                 return ResourceManager.GetString("The100ChatBrowser_CreateChatListenerScript", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ( function()
+        ///{
+        ///    var lastMessage = document.querySelector( &apos;[data-from=&quot;D633_Automod&quot;]&apos; );
+        ///    if( !lastMessage )
+        ///    {
+        ///        throw &apos;Could not find last message.&apos;;
+        ///    }
+        ///
+        ///    var editLink = lastMessage.querySelector( &apos;a.edit-message&apos; );
+        ///    if( !editLink )
+        ///    {
+        ///        throw &apos;Could not find edit link for last message.&apos;;
+        ///    }
+        ///
+        ///    editLink.click();
+        ///
+        ///    var editMessageInput = document.querySelector( &apos;form.edit-message input.inputMessage&apos; );
+        ///    if( !editMessageInput )
+        ///    {
+        ///        t [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string The100ChatBrowser_EditLastMessage {
+            get {
+                return ResourceManager.GetString("The100ChatBrowser_EditLastMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ( function()
+        ///{
+        ///    var chatMessageInput = document.querySelector( &apos;#chatroom .inputMessage&apos; );
+        ///    if( !chatMessageInput )
+        ///    {
+        ///        throw &apos;Could not find chat message input.&apos;;
+        ///    }
+        ///
+        ///    var chatMessageSubmit = document.querySelector( &apos;#chatSubmit&apos; );
+        ///    if( !chatMessageSubmit )
+        ///    {
+        ///        throw &apos;Could not find chat message submit button.&apos;;
+        ///    }
+        ///
+        ///    chatMessageInput.value = `{chatMessage}`;
+        ///    chatMessageSubmit.click();
+        ///} )();.
+        /// </summary>
+        internal static string The100ChatBrowser_SendChatMessage {
+            get {
+                return ResourceManager.GetString("The100ChatBrowser_SendChatMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ( function()
+        ///{
+        ///    var homePageHtmlInput = document.getElementById( &apos;html&apos; );
+        ///    if( !homePageHtmlInput )
+        ///    {
+        ///        throw &apos;Could not find home page html input.&apos;;
+        ///    }
+        ///
+        ///    function waitForHomePageHtml()
+        ///    {
+        ///        if( homePageHtmlInput.value )
+        ///        {
+        ///            The100BoundMod.onHomePageHtmlReceived( homePageHtmlInput.value );
+        ///        }
+        ///        else
+        ///        {
+        ///            setTimeout( waitForHomePageHtml, 100 );
+        ///        }
+        ///    }
+        ///    
+        ///    waitForHomePageHtml();
+        ///
+        ///} )();.
+        /// </summary>
+        internal static string The100ModBrowser_GetHomePageHtml {
+            get {
+                return ResourceManager.GetString("The100ModBrowser_GetHomePageHtml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ( function()
+        ///{
+        ///    var homePageHtmlInput = document.getElementById( &apos;group_latest_news_html&apos; );
+        ///    if( !homePageHtmlInput )
+        ///    {
+        ///        throw &apos;Failed to find &quot;Latest New HTML&quot; input.&apos;;
+        ///    }
+        ///
+        ///    homePageHtmlInput.value = `{homePageHtml}`;
+        ///
+        ///    var submitButton = document.querySelector( &apos;#edit_group_268 input[type=&quot;submit&quot;]&apos; );
+        ///    if( !submitButton )
+        ///    {
+        ///        throw &apos;Failed to find Submit button.&apos;;
+        ///    }
+        ///
+        ///    submitButton.click();
+        ///} )();.
+        /// </summary>
+        internal static string The100ModBrowser_SetHomePageHtml {
+            get {
+                return ResourceManager.GetString("The100ModBrowser_SetHomePageHtml", resourceCulture);
+            }
+        }
     }
 }

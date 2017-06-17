@@ -64,6 +64,11 @@
     <Compile Include="LoginDialog.Designer.cs">
       <DependentUpon>LoginDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="The100AutoModForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,6 +83,9 @@
     <Compile Include="The100ChatBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="The100ModBrowser.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Util.cs" />
     <EmbeddedResource Include="LoginDialog.resx">
       <DependentUpon>LoginDialog.cs</DependentUpon>
@@ -87,14 +95,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -110,10 +113,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\JS\LoginScript.js" />
+    <Content Include="Resources\JS\The100Browser_LoginScript.js" />
+    <Content Include="Resources\JS\The100ChatBrowser_EditLastMessage.js" />
+    <Content Include="Resources\JS\The100ChatBrowser_SendChatMessage.js" />
+    <Content Include="Resources\JS\The100ModBrowser_GetHomePageHtml.js" />
+    <Content Include="Resources\JS\The100ModBrowser_SetHomePageHtml.js" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\JS\CreateChatListenerScript.js" />
+    <None Include="Resources\JS\The100ChatBrowser_CreateChatListenerScript.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\cef.redist.x64.3.2987.1601\build\cef.redist.x64.targets" Condition="Exists('..\packages\cef.redist.x64.3.2987.1601\build\cef.redist.x64.targets')" />

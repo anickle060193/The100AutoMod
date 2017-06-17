@@ -124,4 +124,16 @@
   <data name="The100ChatBrowser_CreateChatListenerScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\js\the100chatbrowser_createchatlistenerscript.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="The100ChatBrowser_EditLastMessage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\js\the100chatbrowser_editlastmessage.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="The100ChatBrowser_SendChatMessage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\js\the100chatbrowser_sendchatmessage.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="The100ModBrowser_GetHomePageHtml" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\js\the100modbrowser_gethomepagehtml.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="The100ModBrowser_SetHomePageHtml" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\js\the100modbrowser_sethomepagehtml.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>

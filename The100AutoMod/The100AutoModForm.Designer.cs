@@ -115,7 +115,7 @@
             this.uiModTab.Location = new System.Drawing.Point(4, 22);
             this.uiModTab.Name = "uiModTab";
             this.uiModTab.Padding = new System.Windows.Forms.Padding(3);
-            this.uiModTab.Size = new System.Drawing.Size(692, 611);
+            this.uiModTab.Size = new System.Drawing.Size(692, 635);
             this.uiModTab.TabIndex = 1;
             this.uiModTab.Text = "Mod";
             this.uiModTab.UseVisualStyleBackColor = true;

@@ -24,36 +24,30 @@ namespace The100AutoMod
 
         private static readonly ILog LOG = LogManager.GetLogger( typeof( The100ChatBrowser ) );
 
-        private static readonly String THE100_CHAT_URL = "https://www.the100.io/groups/268/chatroom";
+        public event EventHandler<ChatMessageReceivedEventArgs> ChatMessageReceived;
 
         private readonly The100ChatBoundObject _boundChat = new The100ChatBoundObject();
 
-        public event EventHandler<ChatMessageReceivedEventArgs> ChatMessageReceived;
+        private readonly String _chatUrl;
 
-        public The100ChatBrowser()
+        public The100ChatBrowser( String chatUrl )
         {
+            _chatUrl = chatUrl;
+
             _boundChat.ChatMessageReceived += BoundChat_ChatMessageReceived;
-        }
-
-        protected override void OnLoggedIn( EventArgs e )
-        {
-            base.OnLoggedIn( e );
-
-            this.Load( THE100_CHAT_URL );
+            this.RegisterAsyncJsObject( "The100BoundChat", _boundChat );
         }
 
         protected override void OnFrameLoadEnd( FrameLoadEndEventArgs e )
         {
-            if( e.Url == THE100_CHAT_URL )
+            if( e.Url == _chatUrl )
             {
                 LOG.Debug( "OnFrameLoadEnd - Chat" );
             
                 this.ExecuteScriptAsync( Resources.The100ChatBrowser_CreateChatListenerScript );
             }
-            else
-            {
-                base.OnFrameLoadEnd( e );
-            }
+
+            base.OnFrameLoadEnd( e );
         }
 
         private void BoundChat_ChatMessageReceived( object sender, ChatMessageReceivedEventArgs e )
@@ -64,6 +58,21 @@ namespace The100AutoMod
         protected virtual void OnChatMessageReceived( ChatMessageReceivedEventArgs e )
         {
             ChatMessageReceived?.Invoke( this, e );
+        }
+
+        public void GotoChat()
+        {
+            this.Load( _chatUrl );
+        }
+
+        public void SendChatMessage( String message )
+        {
+            this.ExecuteScriptAsync( Resources.The100ChatBrowser_SendChatMessage.Inject( new { chatMessage = message } ) );
+        }
+
+        public void EditLastMessage( String newMessage )
+        {
+            this.ExecuteScriptAsync( Resources.The100ChatBrowser_EditLastMessage.Inject( new { editChatMessage = newMessage } ) );
         }
     }
 

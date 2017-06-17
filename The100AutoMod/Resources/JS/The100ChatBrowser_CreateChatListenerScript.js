@@ -20,7 +20,7 @@
 
                     if( timeAgo > loadedTime )
                     {
-                        The100AutoMod.onChatMessageReceived( username, timeAgo, content );
+                        The100BoundChat.onChatMessageReceived( username, timeAgo, content );
                     }
                 } );
             } );

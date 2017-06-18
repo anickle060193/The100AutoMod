@@ -34,8 +34,8 @@
             this.uiOpenNotifyIconMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uiExitNotifyIconMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uiSplitLayout = new System.Windows.Forms.SplitContainer();
-            this.uiChat = new System.Windows.Forms.TextBox();
             this.uiBrowserSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.uiChat = new System.Windows.Forms.TextBox();
             this.uiNotifyIconContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uiSplitLayout)).BeginInit();
             this.uiSplitLayout.Panel1.SuspendLayout();
@@ -89,6 +89,15 @@
             this.uiSplitLayout.SplitterDistance = 700;
             this.uiSplitLayout.TabIndex = 1;
             // 
+            // uiBrowserSplitContainer
+            // 
+            this.uiBrowserSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uiBrowserSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this.uiBrowserSplitContainer.Name = "uiBrowserSplitContainer";
+            this.uiBrowserSplitContainer.Size = new System.Drawing.Size(700, 661);
+            this.uiBrowserSplitContainer.SplitterDistance = 350;
+            this.uiBrowserSplitContainer.TabIndex = 0;
+            // 
             // uiChat
             // 
             this.uiChat.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -98,15 +107,6 @@
             this.uiChat.ReadOnly = true;
             this.uiChat.Size = new System.Drawing.Size(274, 655);
             this.uiChat.TabIndex = 0;
-            // 
-            // uiBrowserSplitContainer
-            // 
-            this.uiBrowserSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uiBrowserSplitContainer.Location = new System.Drawing.Point(0, 0);
-            this.uiBrowserSplitContainer.Name = "uiBrowserSplitContainer";
-            this.uiBrowserSplitContainer.Size = new System.Drawing.Size(700, 661);
-            this.uiBrowserSplitContainer.SplitterDistance = 233;
-            this.uiBrowserSplitContainer.TabIndex = 0;
             // 
             // The100AutoModForm
             // 

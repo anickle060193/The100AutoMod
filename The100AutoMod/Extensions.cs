@@ -35,6 +35,30 @@ namespace The100AutoMod
                 d.DynamicInvoke( args );
             }
         }
+
+        public static DateTime StartOfWeek( this DateTime dateTime, DayOfWeek startOfWeek )
+        {
+            int diff = dateTime.DayOfWeek - startOfWeek;
+            if( diff < 0 )
+            {
+                diff += 7;
+            }
+            return dateTime.AddDays( -diff ).Date;
+        }
+
+        public static DateTime Next( this DateTime start, DayOfWeek dayOfWeek, int hour, int minute )
+        {
+            DateTime next = start.StartOfWeek( DayOfWeek.Sunday )
+                .Add( new TimeSpan( (int)dayOfWeek, hour, minute, 0 ) );
+            if( next < start )
+            {
+                return next.AddDays( 7 );
+            }
+            else
+            {
+                return next;
+            }
+        }
     }
 
     // From http://mo.notono.us/2008/07/c-stringinject-format-strings-by-key.html
@@ -106,7 +130,6 @@ namespace The100AutoMod
             return result;
 
         }
-
 
         /// <summary>
         /// Creates a HashTable based on current object state.

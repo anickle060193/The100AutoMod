@@ -62,17 +62,26 @@ namespace The100AutoMod
 
         public void GotoChat()
         {
-            this.Load( _chatUrl );
+            if( this.GetMainFrame().Url != _chatUrl )
+            {
+                this.Load( _chatUrl );
+            }
         }
 
         public void SendChatMessage( String message )
         {
-            this.ExecuteScriptAsync( Resources.The100ChatBrowser_SendChatMessage.Inject( new { chatMessage = message } ) );
+            if( this.GetMainFrame().Url == _chatUrl )
+            {
+                this.ExecuteScriptAsync( Resources.The100ChatBrowser_SendChatMessage.Inject( new { chatMessage = message } ) );
+            }
         }
 
         public void EditLastMessage( String newMessage )
         {
-            this.ExecuteScriptAsync( Resources.The100ChatBrowser_EditLastMessage.Inject( new { editChatMessage = newMessage } ) );
+            if( this.GetMainFrame().Url == _chatUrl )
+            {
+                this.ExecuteScriptAsync( Resources.The100ChatBrowser_EditLastMessage.Inject( new { editChatMessage = newMessage } ) );
+            }
         }
     }
 

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CefSharp;
 using The100AutoMod.Properties;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace The100AutoMod
 {
@@ -23,7 +24,9 @@ namespace The100AutoMod
         private static readonly Regex CHAT_MENTION_UPDATE = new Regex( @"^\s*@D633_Automod\s+Update(?:\s+Xur:\s*(?<xur>[^\s].*?))?\s*$" );
 
         private readonly The100ModBoundObject _boundMod = new The100ModBoundObject();
+        private readonly Timer _updateTimer = new Timer();
 
+        private DateTime _lastUpdateCheck = DateTime.UtcNow;
         private bool _updating = false;
         private String _updateHtml = null;
         private bool _afterUpdate = false;
@@ -34,6 +37,20 @@ namespace The100AutoMod
             this.RegisterAsyncJsObject( "The100BoundMod", _boundMod );
 
             this.ChatMessageReceived += The100ModBrowser_ChatMessageReceived;
+
+            _updateTimer.Tick += UpdateTimer_Tick;
+            _updateTimer.Interval = (int)TimeSpan.FromMinutes( 1 ).TotalMilliseconds;
+            _updateTimer.Start();
+        }
+
+        protected override void Dispose( bool disposing )
+        {
+            base.Dispose( disposing );
+
+            if( disposing )
+            {
+                _updateTimer.Dispose();
+            }
         }
 
         protected override void OnLoggedIn( EventArgs e )
@@ -52,6 +69,7 @@ namespace The100AutoMod
                     String script = Resources.The100ModBrowser_SetHomePageHtml.Inject( new { homePageHtml = _updateHtml } );
                     this.ExecuteScriptAsync( script );
 
+                    _lastUpdateCheck = DateTime.UtcNow;
                     _updating = false;
                     _updateHtml = null;
                     _afterUpdate = true;
@@ -62,7 +80,7 @@ namespace The100AutoMod
 
                     await Task.Delay( 2000 );
 
-                    this.EditLastMessage( "Update done." );
+                    this.SendChatMessage( "Update done." );
                 }
             }
             else if( e.Url == THE100_MOD_AFTER_UPDATE_URL )
@@ -105,25 +123,53 @@ namespace The100AutoMod
                 }
                 else
                 {
-                    this.UpdateHomePage( null );
+                    this.UpdateHomePage();
                 }
             }
         }
 
-        private void UpdateHomePage( String xurLocation )
+        private void UpdateTimer_Tick( object sender, EventArgs e )
         {
-            _updating = true;
-
-            this.SendChatMessage( "Starting update..." );
-
-            if( xurLocation == null )
+            if( !_updating )
             {
-                this.Load( DELTA_COMPANY_633_HELPER_URL );
+                DateTime utcNow = DateTime.UtcNow;
+                if( GetResetTimes( _lastUpdateCheck ).Any( resetTime => resetTime > _lastUpdateCheck && resetTime <= utcNow ) )
+                {
+                    this.UpdateHomePage();
+                }
+                _lastUpdateCheck = utcNow;
             }
-            else
+        }
+
+        private void UpdateHomePage( String xurLocation = null )
+        {
+            if( !_updating )
             {
-                this.Load( DELTA_COMPANY_633_HELPER_XUR_URL.Inject( new { xur = xurLocation } ) );
+                _updating = true;
+
+                this.SendChatMessage( "Starting update..." );
+
+                if( String.IsNullOrWhiteSpace( xurLocation ) )
+                {
+                    this.Load( DELTA_COMPANY_633_HELPER_URL );
+                }
+                else
+                {
+                    this.Load( DELTA_COMPANY_633_HELPER_XUR_URL.Inject( new { xur = xurLocation } ) );
+                }
             }
+        }
+
+        private DateTime[] GetResetTimes( DateTime utcStart )
+        {
+            DateTime startOfWeek = utcStart.StartOfWeek( DayOfWeek.Sunday );
+
+            DateTime weeklyReset = startOfWeek.Next( DayOfWeek.Tuesday, 9, 30 );
+            DateTime trials = startOfWeek.Next( DayOfWeek.Friday, 5, 30 );
+            DateTime xurArrival = startOfWeek.Next( DayOfWeek.Friday, 9, 30 );
+            DateTime xurDeparture = startOfWeek.Next( DayOfWeek.Sunday, 9, 30 );
+
+            return new[] { weeklyReset, trials, xurArrival, xurDeparture };
         }
 
         private class HomePageHtmlReceivedEventArgs : EventArgs

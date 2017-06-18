@@ -26,6 +26,8 @@ namespace The100AutoMod
         public The100Browser() : base( "" )
         {
             base.FrameLoadEnd += The100Browser_FrameLoadEnd;
+
+            this.MenuHandler = new The100BrowserContextMenuHandler();
         }
 
         private void The100Browser_FrameLoadEnd( object sender, FrameLoadEndEventArgs e )

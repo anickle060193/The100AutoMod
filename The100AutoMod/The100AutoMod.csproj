@@ -80,6 +80,7 @@
     <Compile Include="The100Browser.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="The100BrowserContextMenuHandler.cs" />
     <Compile Include="The100ChatBrowser.cs">
       <SubType>Component</SubType>
     </Compile>

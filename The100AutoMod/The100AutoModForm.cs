@@ -23,6 +23,8 @@ namespace The100AutoMod
         private The100ChatBrowser _chatBrowser;
         private The100ModBrowser _modBrowser;
 
+        private bool _wasMaximized;
+
         public The100AutoModForm()
         {
             LOG.Debug( "Constructor" );
@@ -32,7 +34,6 @@ namespace The100AutoMod
             InitializeFromSettings();
 
             this.Resize += The100AutoModForm_Resize;
-            this.ResizeEnd += The100AutoModForm_ResizeEnd;
             this.FormClosing += The100AutoModForm_FormClosing;
         }
 
@@ -118,30 +119,14 @@ namespace The100AutoMod
                 this.Hide();
                 uiNotifyIcon.Visible = true;
             }
-        }
-
-        private void The100AutoModForm_ResizeEnd( object sender, EventArgs e )
-        {
-            if( this.WindowState == FormWindowState.Maximized )
+            else if( this.WindowState == FormWindowState.Maximized )
             {
-                Settings.Default.The100AutoModFormMaximized = true;
-                Settings.Default.The100AutoModFormSize = this.RestoreBounds.Size;
-                Settings.Default.The100AutoModFormLocation = this.RestoreBounds.Location;
-            }
-            else if( this.WindowState == FormWindowState.Minimized )
-            {
-                Settings.Default.The100AutoModFormMaximized = false;
-                Settings.Default.The100AutoModFormSize = this.RestoreBounds.Size;
-                Settings.Default.The100AutoModFormLocation = this.RestoreBounds.Location;
+                _wasMaximized = true;
             }
             else
             {
-                Settings.Default.The100AutoModFormMaximized = false;
-                Settings.Default.The100AutoModFormSize = this.Size;
-                Settings.Default.The100AutoModFormLocation = this.Location;
+                _wasMaximized = false;
             }
-
-            Settings.Default.Save();
         }
 
         private void The100AutoModForm_FormClosing( object sender, FormClosingEventArgs e )
@@ -150,6 +135,8 @@ namespace The100AutoMod
 
             _chatBrowser.Dispose();
             _modBrowser.Dispose();
+
+            SaveWindowState();
         }
 
         private void Browser_LoginPrompt( object sender, LoginPromptEventArgs e )
@@ -182,12 +169,38 @@ namespace The100AutoMod
             _chatBrowser.StartLogin();
         }
 
+        private void SaveWindowState()
+        {
+            if( this.WindowState == FormWindowState.Maximized
+             || this.WindowState == FormWindowState.Minimized )
+            {
+                Settings.Default.The100AutoModFormMaximized = _wasMaximized;
+                Settings.Default.The100AutoModFormSize = this.RestoreBounds.Size;
+                Settings.Default.The100AutoModFormLocation = this.RestoreBounds.Location;
+            }
+            else
+            {
+                Settings.Default.The100AutoModFormMaximized = false;
+                Settings.Default.The100AutoModFormSize = this.Size;
+                Settings.Default.The100AutoModFormLocation = this.Location;
+            }
+
+            Settings.Default.Save();
+        }
+
         private void ShowMe()
         {
             this.Show();
             if( this.WindowState == FormWindowState.Minimized )
             {
-                this.WindowState = FormWindowState.Normal;
+                if( _wasMaximized )
+                {
+                    this.WindowState = FormWindowState.Maximized;
+                }
+                else
+                {
+                    this.WindowState = FormWindowState.Normal;
+                }
             }
             this.BringToFront();
             uiNotifyIcon.Visible = false;

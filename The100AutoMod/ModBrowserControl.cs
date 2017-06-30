@@ -16,7 +16,10 @@ namespace The100AutoMod
 {
     public partial class ModBrowserControl : UserControl, IThe100BrowserControl
     {
-        private The100ModBrowser ModBrowser { get; set; }
+        private static readonly String THE100_MOD_URL = "https://www.the100.io/groups/268/edit";
+
+        private The100ModChatBrowser ModChatBrowser { get; set; }
+        private The100ModUtilBrowser ModUtilBrowser { get; set; }
 
         public event EventHandler LoggedIn;
         public event EventHandler<LoginPromptEventArgs> LoginPrompt;
@@ -25,33 +28,30 @@ namespace The100AutoMod
         {
             InitializeComponent();
 
-            ModBrowser = new The100ModBrowser();
-            ModBrowser.Dock = DockStyle.Fill;
-            ModBrowser.LoginPrompt += ModBrowser_LoginPrompt;
-            ModBrowser.LoggedIn += ModBrowser_LoggedIn;
-            uiModBrowserTab.Controls.Add( ModBrowser );
+            ModChatBrowser = new The100ModChatBrowser( this );
+            ModChatBrowser.Dock = DockStyle.Fill;
+            ModChatBrowser.LoginPrompt += ( sender, e ) => this.OnLoginPrompt( e );
+            ModChatBrowser.LoggedIn += ( sender, e ) => this.OnLoggedIn( e );
+            uiSplitContainer.Panel1.Controls.Add( ModChatBrowser );
+
+            ModUtilBrowser = new The100ModUtilBrowser( this );
+            ModUtilBrowser.Dock = DockStyle.Fill;
+            ModUtilBrowser.LoginPrompt += ( sender, e ) => this.OnLoginPrompt( e );
+            ModUtilBrowser.LoggedIn += ( sender, e ) => ModChatBrowser.StartLogin();
+            uiSplitContainer.Panel2.Controls.Add( ModUtilBrowser );
 
             this.Disposed += ModBrowserControl_Disposed;
         }
 
         public void StartLogin()
         {
-            ModBrowser.StartLogin();
+            ModUtilBrowser.StartLogin();
         }
 
         private void ModBrowserControl_Disposed( object sender, EventArgs e )
         {
-            ModBrowser.Dispose();
-        }
-
-        private void ModBrowser_LoginPrompt( object sender, LoginPromptEventArgs e )
-        {
-            this.OnLoginPrompt( e );
-        }
-
-        private void ModBrowser_LoggedIn( object sender, EventArgs e )
-        {
-            this.OnLoggedIn( e );
+            ModChatBrowser.Dispose();
+            ModUtilBrowser.Dispose();
         }
 
         protected virtual void OnLoggedIn( EventArgs e )
@@ -64,66 +64,75 @@ namespace The100AutoMod
             LoginPrompt?.Invoke( this, e );
         }
 
-        class The100ModBrowser : The100ChatBrowser
+        class The100ModUtilBrowser : The100ChatBrowser
         {
-            private static readonly ILog LOG = LogManager.GetLogger( typeof( The100ModBrowser ) );
+            private static readonly ILog LOG = LogManager.GetLogger( typeof( The100ModUtilBrowser ) );
 
-            private static readonly String THE100_MOD_URL = "https://www.the100.io/groups/268/edit";
             private static readonly String THE100_MOD_AFTER_UPDATE_URL = "https://www.the100.io/groups/268";
             private static readonly String DELTA_COMPANY_633_HELPER_URL = "https://deltacompany633.com/?bot=true";
             private static readonly String DELTA_COMPANY_633_HELPER_XUR_URL = "https://deltacompany633.com/?bot=true&xur={xur}";
             private static readonly String DELTA_COMPANY_633_HELPER_RESULTS_HTML = "https://deltacompany633.com/formatter.html";
 
-            private static readonly Regex CHAT_MENTION_UPDATE = new Regex( @"^\s*@D633_Automod\s+Update(?:\s+Xur:\s*(?<xur>[^\s].*?))?\s*$" );
-
+            private readonly ModBrowserControl _owner;
             private readonly The100ModBoundObject _boundMod = new The100ModBoundObject();
-            private readonly Timer _updateTimer = new Timer();
 
-            private DateTime _lastUpdateCheck = DateTime.UtcNow;
-            private bool _updating = false;
             private String _updateHtml = null;
             private bool _afterUpdate = false;
 
-            public The100ModBrowser() : base( THE100_MOD_URL )
+            internal event EventHandler HomePageUpdated;
+
+            internal bool Updating { get; private set; }
+
+            public The100ModUtilBrowser( ModBrowserControl owner ) : base( THE100_MOD_URL )
             {
+                _owner = owner;
+
                 _boundMod.HomePageHtmlReceived += BoundMod_HomePageHtmlReceived;
                 this.RegisterAsyncJsObject( "The100BoundMod", _boundMod );
-
-                this.ChatMessageReceived += The100ModBrowser_ChatMessageReceived;
-
-                _updateTimer.Tick += UpdateTimer_Tick;
-                _updateTimer.Interval = (int)TimeSpan.FromMinutes( 1 ).TotalMilliseconds;
-                _updateTimer.Start();
             }
 
-            protected override void Dispose( bool disposing )
+            private void BoundMod_HomePageHtmlReceived( object sender, HomePageHtmlReceivedEventArgs e )
             {
-                base.Dispose( disposing );
+                _updateHtml = e.HomePageHtml;
+                Updating = !String.IsNullOrEmpty( _updateHtml );
 
-                if( disposing )
+                this.Load( THE100_MOD_URL );
+            }
+
+            internal void UpdateHomePage( String xurLocation = null )
+            {
+                if( !Updating )
                 {
-                    _updateTimer.Dispose();
+                    Updating = true;
+
+                    this.SendChatMessage( "Starting update..." );
+
+                    if( String.IsNullOrWhiteSpace( xurLocation ) )
+                    {
+                        this.Load( DELTA_COMPANY_633_HELPER_URL );
+                    }
+                    else
+                    {
+                        this.Load( DELTA_COMPANY_633_HELPER_XUR_URL.Inject( new { xur = xurLocation } ) );
+                    }
                 }
             }
 
-            protected override void OnLoggedIn( EventArgs e )
+            protected virtual void OnHomePageUpdated( EventArgs e )
             {
-                base.OnLoggedIn( e );
-
-                this.Load( THE100_MOD_URL );
+                HomePageUpdated?.Invoke( this, e );
             }
 
             protected override async void OnFrameLoadEnd( FrameLoadEndEventArgs e )
             {
                 if( e.Url == THE100_MOD_URL )
                 {
-                    if( _updating )
+                    if( Updating )
                     {
                         String script = Resources.The100ModBrowser_SetHomePageHtml.Inject( new { homePageHtml = _updateHtml } );
                         this.ExecuteScriptAsync( script );
 
-                        _lastUpdateCheck = DateTime.UtcNow;
-                        _updating = false;
+                        Updating = false;
                         _updateHtml = null;
                         _afterUpdate = true;
                     }
@@ -133,7 +142,7 @@ namespace The100AutoMod
 
                         await Task.Delay( 2000 );
 
-                        this.SendChatMessage( "Update done." );
+                        this.EditLastMessage( "Starting update...Update done" );
                     }
                 }
                 else if( e.Url == THE100_MOD_AFTER_UPDATE_URL )
@@ -157,74 +166,6 @@ namespace The100AutoMod
                 base.OnFrameLoadEnd( e );
             }
 
-            private void BoundMod_HomePageHtmlReceived( object sender, HomePageHtmlReceivedEventArgs e )
-            {
-                _updateHtml = e.HomePageHtml;
-                _updating = !String.IsNullOrEmpty( _updateHtml );
-
-                this.Load( THE100_MOD_URL );
-            }
-
-            private void The100ModBrowser_ChatMessageReceived( object sender, ChatMessageReceivedEventArgs e )
-            {
-                Match m = CHAT_MENTION_UPDATE.Match( e.Message.Content );
-                if( m.Success )
-                {
-                    if( m.Groups[ "xur" ].Success )
-                    {
-                        this.UpdateHomePage( m.Groups[ "xur" ].Value );
-                    }
-                    else
-                    {
-                        this.UpdateHomePage();
-                    }
-                }
-            }
-
-            private void UpdateTimer_Tick( object sender, EventArgs e )
-            {
-                if( !_updating )
-                {
-                    DateTime utcNow = DateTime.UtcNow;
-                    if( GetResetTimes( _lastUpdateCheck ).Any( resetTime => resetTime > _lastUpdateCheck && resetTime <= utcNow ) )
-                    {
-                        this.UpdateHomePage();
-                    }
-                    _lastUpdateCheck = utcNow;
-                }
-            }
-
-            private void UpdateHomePage( String xurLocation = null )
-            {
-                if( !_updating )
-                {
-                    _updating = true;
-
-                    this.SendChatMessage( "Starting update..." );
-
-                    if( String.IsNullOrWhiteSpace( xurLocation ) )
-                    {
-                        this.Load( DELTA_COMPANY_633_HELPER_URL );
-                    }
-                    else
-                    {
-                        this.Load( DELTA_COMPANY_633_HELPER_XUR_URL.Inject( new { xur = xurLocation } ) );
-                    }
-                }
-            }
-
-            private DateTime[] GetResetTimes( DateTime utcStart )
-            {
-                DateTime startOfWeek = utcStart.StartOfWeek( DayOfWeek.Sunday );
-
-                DateTime weeklyReset = startOfWeek.Next( DayOfWeek.Tuesday, 9, 30 );
-                DateTime trials = startOfWeek.Next( DayOfWeek.Friday, 17, 30 );
-                DateTime xurArrival = startOfWeek.Next( DayOfWeek.Friday, 9, 30 );
-                DateTime xurDeparture = startOfWeek.Next( DayOfWeek.Sunday, 9, 30 );
-
-                return new[] { weeklyReset, trials, xurArrival, xurDeparture };
-            }
-
             private class HomePageHtmlReceivedEventArgs : EventArgs
             {
                 public String HomePageHtml { get; private set; }
@@ -243,6 +184,104 @@ namespace The100AutoMod
                 {
                     HomePageHtmlReceived?.Invoke( this, new HomePageHtmlReceivedEventArgs( homePageHtml ) );
                 }
+            }
+        }
+
+        class The100ModChatBrowser : The100ChatBrowser
+        {
+            private static readonly ILog LOG = LogManager.GetLogger( typeof( The100ModChatBrowser ) );
+
+            private static readonly Regex CHAT_MENTION_UPDATE = new Regex( @"^\s*@D633_Automod\s+Update(?:\s+Xur:\s*(?<xur>[^\s].*?))?\s*$" );
+
+            private readonly ModBrowserControl _owner;
+            private readonly Timer _updateTimer = new Timer();
+
+            private DateTime _lastUpdateCheck = DateTime.UtcNow;
+
+            public The100ModChatBrowser( ModBrowserControl owner ) : base( THE100_MOD_URL )
+            {
+                _owner = owner;
+
+                this.ChatMessageReceived += The100ModBrowser_ChatMessageReceived;
+
+                _updateTimer.Tick += UpdateTimer_Tick;
+                _updateTimer.Interval = (int)TimeSpan.FromMinutes( 1 ).TotalMilliseconds;
+                _updateTimer.Start();
+            }
+
+            protected override void Dispose( bool disposing )
+            {
+                base.Dispose( disposing );
+
+                if( disposing )
+                {
+                    _updateTimer.Dispose();
+                }
+            }
+
+            protected override void OnLoggedIn( EventArgs e )
+            {
+                base.OnLoggedIn( e );
+
+                this.Load( THE100_MOD_URL );
+
+                _owner.ModUtilBrowser.HomePageUpdated += ModUtilBrowser_HomePageUpdated;
+            }
+
+            protected override void OnFrameLoadEnd( FrameLoadEndEventArgs e )
+            {
+                if( e.Url == THE100_MOD_URL )
+                {
+                    LOG.DebugFormat( "OnFrameLoaded - {0}", e.Url );
+                }
+
+                base.OnFrameLoadEnd( e );
+            }
+
+            private void The100ModBrowser_ChatMessageReceived( object sender, ChatMessageReceivedEventArgs e )
+            {
+                Match m = CHAT_MENTION_UPDATE.Match( e.Message.Content );
+                if( m.Success )
+                {
+                    if( m.Groups[ "xur" ].Success )
+                    {
+                        _owner.ModUtilBrowser.UpdateHomePage( m.Groups[ "xur" ].Value );
+                    }
+                    else
+                    {
+                        _owner.ModUtilBrowser.UpdateHomePage();
+                    }
+                }
+            }
+
+            private void UpdateTimer_Tick( object sender, EventArgs e )
+            {
+                if( !_owner.ModUtilBrowser.Updating )
+                {
+                    DateTime utcNow = DateTime.UtcNow;
+                    if( GetResetTimes( _lastUpdateCheck ).Any( resetTime => resetTime > _lastUpdateCheck && resetTime <= utcNow ) )
+                    {
+                        _owner.ModUtilBrowser.UpdateHomePage();
+                    }
+                    _lastUpdateCheck = utcNow;
+                }
+            }
+
+            private void ModUtilBrowser_HomePageUpdated( object sender, EventArgs e )
+            {
+                _lastUpdateCheck = DateTime.UtcNow;
+            }
+
+            private DateTime[] GetResetTimes( DateTime utcStart )
+            {
+                DateTime startOfWeek = utcStart.StartOfWeek( DayOfWeek.Sunday );
+
+                DateTime weeklyReset = startOfWeek.Next( DayOfWeek.Tuesday, 9, 30 );
+                DateTime trials = startOfWeek.Next( DayOfWeek.Friday, 17, 30 );
+                DateTime xurArrival = startOfWeek.Next( DayOfWeek.Friday, 9, 30 );
+                DateTime xurDeparture = startOfWeek.Next( DayOfWeek.Sunday, 9, 30 );
+
+                return new[] { weeklyReset, trials, xurArrival, xurDeparture };
             }
         }
     }

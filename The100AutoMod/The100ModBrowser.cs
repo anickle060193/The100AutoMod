@@ -165,7 +165,7 @@ namespace The100AutoMod
             DateTime startOfWeek = utcStart.StartOfWeek( DayOfWeek.Sunday );
 
             DateTime weeklyReset = startOfWeek.Next( DayOfWeek.Tuesday, 9, 30 );
-            DateTime trials = startOfWeek.Next( DayOfWeek.Friday, 5, 30 );
+            DateTime trials = startOfWeek.Next( DayOfWeek.Friday, 17, 30 );
             DateTime xurArrival = startOfWeek.Next( DayOfWeek.Friday, 9, 30 );
             DateTime xurDeparture = startOfWeek.Next( DayOfWeek.Sunday, 9, 30 );
 

@@ -21,7 +21,7 @@ namespace The100AutoMod
         private static readonly String THE100_CHAT_URL = "https://www.the100.io/groups/268/chatroom";
 
         private The100ChatBrowser _chatBrowser;
-        private The100ModBrowser _modBrowser;
+        private ModBrowserControl _modBrowserControl;
 
         private bool _wasMaximized;
 
@@ -56,10 +56,10 @@ namespace The100AutoMod
             _chatBrowser.IsBrowserInitializedChanged += ChatBrowser_IsBrowserInitializedChanged;
             uiBrowserSplitContainer.Panel2.Controls.Add( _chatBrowser );
 
-            _modBrowser = new The100ModBrowser();
-            _modBrowser.Dock = DockStyle.Fill;
-            _modBrowser.LoginPrompt += Browser_LoginPrompt;
-            uiBrowserSplitContainer.Panel1.Controls.Add( _modBrowser );
+            _modBrowserControl = new ModBrowserControl();
+            _modBrowserControl.Dock = DockStyle.Fill;
+            _modBrowserControl.LoginPrompt += Browser_LoginPrompt;
+            uiBrowserSplitContainer.Panel1.Controls.Add( _modBrowserControl );
         }
 
         private void InitializeNotifyIcon()
@@ -134,7 +134,7 @@ namespace The100AutoMod
             LOG.DebugInject( "FormClosing - Reason: {CloseReason}", e );
 
             _chatBrowser.Dispose();
-            _modBrowser.Dispose();
+            _modBrowserControl.Dispose();
 
             SaveWindowState();
         }
@@ -155,7 +155,7 @@ namespace The100AutoMod
         private void ChatBrowser_LoggedIn( object sender, EventArgs e )
         {
             _chatBrowser.GotoChat();
-            _modBrowser.StartLogin();
+            _modBrowserControl.StartLogin();
         }
 
         private void ChatBrowser_ChatMessageReceived( object sender, ChatMessageReceivedEventArgs e )

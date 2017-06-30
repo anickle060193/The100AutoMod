@@ -58,11 +58,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
+    <Compile Include="IThe100BrowserControl.cs" />
     <Compile Include="LoginDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="LoginDialog.Designer.cs">
       <DependentUpon>LoginDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ModBrowserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ModBrowserControl.Designer.cs">
+      <DependentUpon>ModBrowserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -84,12 +91,12 @@
     <Compile Include="The100ChatBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="The100ModBrowser.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Util.cs" />
     <EmbeddedResource Include="LoginDialog.resx">
       <DependentUpon>LoginDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModBrowserControl.resx">
+      <DependentUpon>ModBrowserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="The100AutoModForm.resx">
       <DependentUpon>The100AutoModForm.cs</DependentUpon>

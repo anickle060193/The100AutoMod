@@ -10,7 +10,7 @@ using The100AutoMod.Properties;
 
 namespace The100AutoMod
 {
-    abstract class The100Browser : ChromiumWebBrowser
+    abstract class The100Browser : ChromiumWebBrowser, IThe100BrowserControl
     {
         private static readonly ILog LOG = LogManager.GetLogger( typeof( The100Browser ) );
 
@@ -86,22 +86,6 @@ namespace The100AutoMod
         public void StartLogin()
         {
             this.Load( THE100_LOGIN_URL );
-        }
-    }
-
-    class LoginPromptEventArgs : EventArgs
-    {
-        public String Username { get; set; }
-        public String Password { get; set; }
-        public bool CancelLogin { get; set; }
-        public bool RePrompt { get; private set; }
-
-        public LoginPromptEventArgs( bool rePrompt )
-        {
-            Username = "";
-            Password = "";
-            CancelLogin = false;
-            RePrompt = rePrompt;
         }
     }
 }

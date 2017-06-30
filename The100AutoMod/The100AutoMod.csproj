@@ -91,7 +91,6 @@
     <Compile Include="The100ChatBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Util.cs" />
     <EmbeddedResource Include="LoginDialog.resx">
       <DependentUpon>LoginDialog.cs</DependentUpon>
     </EmbeddedResource>

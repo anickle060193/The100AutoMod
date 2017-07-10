@@ -142,7 +142,7 @@ namespace The100AutoMod
 
                         await Task.Delay( 2000 );
 
-                        this.EditLastMessage( "Starting update...Update done" );
+                        this.SendChatMessage( "Update done" );
                     }
                 }
                 else if( e.Url == THE100_MOD_AFTER_UPDATE_URL )
@@ -197,6 +197,8 @@ namespace The100AutoMod
             private readonly Timer _updateTimer = new Timer();
 
             private DateTime _lastUpdateCheck = DateTime.UtcNow;
+            private bool _loadedModChat = false;
+            private bool _loggedIn = false;
 
             public The100ModChatBrowser( ModBrowserControl owner ) : base( THE100_MOD_URL )
             {
@@ -223,6 +225,18 @@ namespace The100AutoMod
             {
                 base.OnLoggedIn( e );
 
+                if( _loggedIn && !_loadedModChat )
+                {
+                    this.UiBeginInvoke( (Action)( () =>
+                    {
+                        MessageBox.Show( "Failed to load Mod Chat. Verify still a mod." );
+                        Application.Exit();
+                    } ) );
+                    return;
+                }
+
+                _loggedIn = true;
+
                 this.Load( THE100_MOD_URL );
 
                 _owner.ModUtilBrowser.HomePageUpdated += ModUtilBrowser_HomePageUpdated;
@@ -233,6 +247,8 @@ namespace The100AutoMod
                 if( e.Url == THE100_MOD_URL )
                 {
                     LOG.DebugFormat( "OnFrameLoaded - {0}", e.Url );
+
+                    _loadedModChat = true;
                 }
 
                 base.OnFrameLoadEnd( e );
